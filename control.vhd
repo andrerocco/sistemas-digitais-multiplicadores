@@ -40,11 +40,17 @@ begin
                 end if;
                 
                 PRONTO <= '1';
+                SIG1 <= '0'; -- (mP = mA = cB)
+                SIG2 <= '0'; -- (cP = cA)
+                SIG3 <= '0'; -- (cmult)
             
             when S1 =>
                 ProximoEstado <= S2; -- Vai para o estado S2 sem condições
                 
                 PRONTO <= '0';
+                SIG1 <= '1'; -- (mP = mA = cB)
+                SIG2 <= '1'; -- (cP = cA)
+                SIG3 <= '0'; -- (cmult)
                 
             when S2 =>
                 if ( (Azero = '0') and (Bzero = '0') ) then -- Se não tiver acabado a multiplicação
@@ -52,13 +58,28 @@ begin
                 elsif ( (Azero = '1') or (Bzero = '1') ) then -- Se algum dos sinais que dizem se A ou B são zero
                     ProximoEstado <= S4; -- Vai para S4
                 end if;
+                
+                PRONTO <= '0';
+                SIG1 <= '0'; -- (mP = mA = cB)
+                SIG2 <= '0'; -- (cP = cA)
+                SIG3 <= '0'; -- (cmult)
             
             when S3 =>
                 ProximoEstado <= S2; -- Vai para o estado S2 sem condições
+                
+                PRONTO <= '0';
+                SIG1 <= '0'; -- (mP = mA = cB)
+                SIG2 <= '1'; -- (cP = cA)
+                SIG3 <= '0'; -- (cmult)
             
             when S4 =>
                 ProximoEstado <= S0; -- Vai para o estado S0 sem condições
-                
+
+                PRONTO <= '0';
+                SIG1 <= '0'; -- (mP = mA = cB)
+                SIG2 <= '0'; -- (cP = cA)
+                SIG3 <= '1'; -- (cmult)
+
         end case;
         
     end process;
