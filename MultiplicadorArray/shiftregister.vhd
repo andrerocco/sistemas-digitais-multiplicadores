@@ -28,7 +28,7 @@ begin
                 reg <= carga;
             elsif (enable_shift_right = '1') then
                 reg <= serial_input & reg(N-1 downto 1); -- Shift para a direita
-                serial_output <= reg(0); -- Valor que "saiu" do registrador com o shift
+                -- serial_output <= reg(0); -- Valor que "saiu" do registrador com o shift
             else
                 reg <= reg;
             end if;
@@ -36,5 +36,7 @@ begin
         end if;
     end process main_process;
     
+    serial_output <= reg(0); -- Valor do último bit guardado (Caso outro shift register recebe como serial_input esse serial_output,
+                             -- o outro shift register precisa do valor do bit que irá sair antes para joga-lo para dentro no próximo clock)
     valor_atual <= reg;
 end bhv;
