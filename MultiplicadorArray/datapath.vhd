@@ -91,8 +91,6 @@ architecture rtl of datapath is
         );
     end component;
 
-    --signal sai_soma, sai_mux1, entra_reg_MULT, sai_reg_MULT, sai_mux2, sai_sub, sai_shift, sai_reg_A, sai_reg_B: std_logic_vector(3 downto 0);
-
     -- Parte 1 do circuito
     signal sai_soma, sai_mux1, sai_shiftPH, sai_shiftPL, sai_regB: std_logic_vector(3 downto 0);
     signal entra_reg_MULT: std_logic_vector(7 downto 0);
