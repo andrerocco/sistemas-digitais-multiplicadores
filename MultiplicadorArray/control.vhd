@@ -5,11 +5,12 @@ entity control is
     port (
         CLK: in std_logic;
         RESET, INICIAR: in std_logic; -- Entradas de controle
-        PRONTO: out std_logic; -- Saída de controle
-        Azero, Bzero, CONTz: in std_logic; -- Sinais de status (recebidos do Datapath)
-        UltimoBitA: in std_logic -- Sinal de status (recebido do Datapath)
         
-        -- SIG1, SIG2, SIG3: out std_logic; -- Sinais de controle (enviados para o Datapath)
+        Azero, Bzero, CONTz: in std_logic; -- Sinais de status (recebidos do Datapath)
+        UltimoBitA: in std_logic; -- Sinal de status (recebido do Datapath)
+        
+        PRONTO: out std_logic; -- Saída de controle
+        SIG1, SIG2, ccont, cmult, cPH: out std_logic -- Sinais de controle (enviados para o Datapath)
     );
 end control;
 
@@ -42,11 +43,23 @@ begin
                 end if;
                 
                 PRONTO <= '1';
+        
+                SIG1 <= '0';
+                SIG2 <= '0';
+                ccont <= '0';
+                cmult <= '0';
+                cPH <= '0';
             
             when S1 =>
                 ProximoEstado <= S2; -- Vai para o estado S2 sem condições
                 
                 PRONTO <= '0';
+        
+                SIG1 <= '1';
+                SIG2 <= '0';
+                ccont <= '1';
+                cmult <= '0';
+                cPH <= '1';
                 
             when S2 =>
                 if ( (Azero = '1') or (Bzero = '1') ) then
@@ -56,6 +69,12 @@ begin
                 end if;
                 
                 PRONTO <= '0';
+        
+                SIG1 <= '0';
+                SIG2 <= '0';
+                ccont <= '0';
+                cmult <= '0';
+                cPH <= '0';
             
             when S3 =>
                 if ( CONTz = '1' ) then
@@ -65,15 +84,47 @@ begin
                 elsif ( (CONTz = '0') and (UltimoBitA = '1') ) then
                     ProximoEstado <= S5;
                 end if;
+                
+                PRONTO <= '0';
+        
+                SIG1 <= '0';
+                SIG2 <= '0';
+                ccont <= '0';
+                cmult <= '0';
+                cPH <= '0';
             
             when S4 =>
                 ProximoEstado <= S4;
+                
+                PRONTO <= '0';
+        
+                SIG1 <= '0';
+                SIG2 <= '0';
+                ccont <= '0';
+                cmult <= '0';
+                cPH <= '1';
             
             when S5 =>
                 ProximoEstado <= S3;
                 
+                PRONTO <= '0';
+        
+                SIG1 <= '0';
+                SIG2 <= '1';
+                ccont <= '1';
+                cmult <= '0';
+                cPH <= '0';
+                
             when S6 =>
                 ProximoEstado <= S0;
+                
+                PRONTO <= '0';
+        
+                SIG1 <= '0';
+                SIG2 <= '0';
+                ccont <= '0';
+                cmult <= '1';
+                cPH <= '0';
 
         end case;
         
