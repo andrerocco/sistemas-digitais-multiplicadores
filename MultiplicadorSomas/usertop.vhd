@@ -2,13 +2,13 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity usertop is
-    -- generic (N: integer := 8);
+    generic (N: integer := 8);
     port (
         CLK: in std_logic;
-        A, B: in std_logic_vector(3 downto 0); -- Números que vão ser multiplicados
+        A, B: in std_logic_vector(N-1 downto 0); -- Números que vão ser multiplicados
         RESET, INICIAR: in std_logic; -- Entradas de controle
         PRONTO: out std_logic; -- Saída de controle
-        RESULTADO: out std_logic_vector(3 downto 0) -- Saída de dados
+        RESULTADO: out std_logic_vector(N-1 downto 0) -- Saída de dados
     );
 end usertop;
 
@@ -25,12 +25,13 @@ architecture rtl of usertop is
     end component;
 
     component datapath is
+		  generic ( N: integer := 8 );
         port(
             CLK: in std_logic;
-            NUMA, NUMB: in std_logic_vector(3 downto 0); -- Números que vão ser multiplicados (Entradas de dados)
+            NUMA, NUMB: in std_logic_vector(N-1 downto 0); -- Números que vão ser multiplicados (Entradas de dados)
             SIG1, SIG2, SIG3: in std_logic; -- Sinais de controle (mP, cP, mA, cA, cB, cmult) onde
                                             -- (mP = mA = cB) é SIG1; (cP = cA) é SIG2; (cmult) é SIG3
-            RESULTADO: out std_logic_vector(3 downto 0); -- Saída de dados
+            RESULTADO: out std_logic_vector(N-1 downto 0); -- Saída de dados
             Az, Bz: out std_logic -- Sinais de status
         );
     end component;

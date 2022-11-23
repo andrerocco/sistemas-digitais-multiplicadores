@@ -3,9 +3,10 @@ USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 
 ENTITY somadorsubtrator IS
-PORT (a, b : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+GENERIC ( N: integer );
+PORT (a, b : IN STD_LOGIC_VECTOR(N-1 DOWNTO 0);
       op: IN STD_LOGIC;
-      s : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
+      s : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0));
 END somadorsubtrator;
 
 ARCHITECTURE estrutura OF somadorsubtrator IS
