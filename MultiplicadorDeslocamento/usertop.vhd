@@ -32,7 +32,7 @@ architecture rtl of usertop is
             RESULTADO: out std_logic_vector(3 downto 0); -- Saída de dados
             Az, Bz, CONTz: out std_logic; -- Sinais de status
             UltimoBitA: out std_logic; -- Sinal de status
-            SIG1, SIG2, ccont, cmult, cPH: out std_logic -- Sinais de controle (enviados do Bloco de Controle)
+            SIG1, SIG2, ccont, cmult, cPH: in std_logic -- Sinais de controle (enviados do Bloco de Controle)
                                                      -- (mPH = cPL = cB = cA = mCONT = mFF) é SIG1
                                                      -- (srPH = srPL = srA0) é SIG2
         );

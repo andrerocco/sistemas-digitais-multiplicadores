@@ -2,13 +2,13 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 
-ENTITY registrador IS
+ENTITY flipflop IS
 PORT (clk: IN STD_LOGIC;
 	  d : IN STD_LOGIC;
 	  q : OUT STD_LOGIC);
-END registrador;
+END flipflop;
 
-ARCHITECTURE estrutura OF registrador IS
+ARCHITECTURE estrutura OF flipflop IS
 BEGIN
 	PROCESS(clk)
 	BEGIN

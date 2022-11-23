@@ -64,7 +64,7 @@ begin
             when S2 =>
                 if ( (Azero = '1') or (Bzero = '1') ) then
                     ProximoEstado <= S6;
-                elsif ( (Azero = '0') and (Bzero = '0') ) then
+                else
                     ProximoEstado <= S3;
                 end if;
                 
@@ -94,7 +94,7 @@ begin
                 cPH <= '0';
             
             when S4 =>
-                ProximoEstado <= S4;
+                ProximoEstado <= S5;
                 
                 PRONTO <= '0';
         
