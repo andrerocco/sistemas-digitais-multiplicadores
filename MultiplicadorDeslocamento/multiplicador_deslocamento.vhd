@@ -4,28 +4,31 @@ use IEEE.std_logic_unsigned.all;
 use IEEE.std_logic_arith.all; 
 
 entity multiplicador_deslocamento is
+generic(
+	N : integer := 4;
+	CONTADOR : integer := 3
+	);
 port(
-    HEX0, HEX1: out std_logic_vector(6 downto 0);
-
+   HEX0, HEX1: out std_logic_vector(6 downto 0); -- Sinaliza o estado
 
 	CLK: in std_logic;
 	INICIAR, RESET: in std_logic;
 	PRONTO: out std_logic;
 	
-	NUM_A, NUM_B: in std_logic_vector(3 downto 0);
+	NUM_A, NUM_B: in std_logic_vector(N-1 downto 0);
 	
-	RESULTADO: out std_logic_vector(7 downto 0)
+	RESULTADO: out std_logic_vector((N*2)-1 downto 0)
 	);
 end multiplicador_deslocamento;
 
 architecture rtl of multiplicador_deslocamento is
     
     component somador_overflow is 
-        -- generic(N : integer := 8);
+        generic(N : integer := 4);
         port (
-            operando1, operando2 : std_logic_vector(3 downto 0);
-	        cout : out std_logic;
-            resultado : out std_logic_vector(3 downto 0)
+            A, B : std_logic_vector(N-1 downto 0);
+	         Cout : out std_logic;
+            RESULTADO : out std_logic_vector(N-1 downto 0)
             );
     end component;
     
@@ -35,25 +38,25 @@ architecture rtl of multiplicador_deslocamento is
     signal EstadoAtual, ProximoEstado: STATES := S0; -- O sistema começa no estado S0
     
     -- Sinais
-    signal reg_mult: std_logic_vector(7 downto 0) := "11111111";
+    signal reg_mult: std_logic_vector((N*2)-1 downto 0) := "11111111";
     
-    signal A, B: std_logic_vector(3 downto 0);
-    signal P: std_logic_vector(7 downto 0);
-    signal reg_cont: std_logic_vector(2 downto 0);
+    signal A, B: std_logic_vector(N-1 downto 0);
+    signal P: std_logic_vector((N*2)-1 downto 0);
+    signal reg_cont: std_logic_vector(CONTADOR-1 downto 0);
     signal status_pronto: std_logic;
     
-    signal Zero_AB: std_logic_vector(3 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de A e B
+    signal Zero_AB: std_logic_vector(N-1 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de A e B
     signal Zero_CONT: std_logic_vector(2 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de reg_cont
 
     signal overflow, overflow_capturado: std_logic := '0';
-    signal reg_soma: std_logic_vector(3 downto 0); 
+    signal reg_soma: std_logic_vector(N-1 downto 0); 
 
 begin
     
     SOMA: somador_overflow port map (
-        operando1 => P(7 downto 4), operando2 => B,
-        cout => overflow,
-        resultado => reg_soma
+        A => P((N*2)-1 downto N), B => B,
+        Cout => overflow,
+        RESULTADO => reg_soma
     );
     
     process(CLK, RESET)
@@ -95,7 +98,7 @@ begin
                 A <= NUM_A; -- Copia os número A da entrada
                 B <= NUM_B; -- Copia os número B da entrada
                 P <= (others => '0'); -- 0 em binário
-                reg_cont <= "100";
+                reg_cont <= std_logic_vector(to_unsigned(CONTADOR, reg_cont'length));
                 
                 
                 HEX0 <= "0010010";
@@ -141,7 +144,7 @@ begin
                 ProximoEstado <= S5;
                 
                 -- Operações
-                P(7 downto 4) <= reg_soma;
+                P((N*2)-1 downto N) <= reg_soma;
                 overflow_capturado <= overflow;
                 
                 reg_mult <= P;
@@ -155,8 +158,8 @@ begin
                 ProximoEstado <= S3;
                 
                 -- Operações
-                A <= '0' & A(3 downto 1); -- Desloca A para direita em 1 bit
-                P <= overflow_capturado & P(7 downto 1); -- Desloca P para direita em 1 bit
+                A <= '0' & A(N-1 downto 1); -- Desloca A para direita em 1 bit
+                P <= overflow_capturado & P((N*2)-1 downto 1); -- Desloca P para direita em 1 bit
                 reg_cont <= reg_cont - 1 ; -- Subtrai 1 do contador
                 
                 reg_mult <= P;
