@@ -54,8 +54,8 @@ architecture rtl of datapath is
 
     signal sai_somador, sai_mux1, sai_regP, sai_regB: std_logic_vector(N-1 downto 0);
     signal sai_subtrator, sai_mux2, sai_regA: std_logic_vector(N-1 downto 0);
-	 signal zero: std_logic_vector(N-1 downto 0) := (others => '0');
-	 signal um: std_logic_vector(N-1 downto 0) := std_logic_vector(to_unsigned(1, N));
+	signal zero: std_logic_vector(N-1 downto 0) := (others => '0');
+	signal um: std_logic_vector(N-1 downto 0) := std_logic_vector(to_unsigned(1, N));
 
 begin
 

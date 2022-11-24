@@ -53,9 +53,11 @@ begin
                 SIG3 <= '0'; -- (cmult)
                 
             when S2 =>
-                if ( (Azero = '0') and (Bzero = '0') ) then -- Se não tiver acabado a multiplicação
+                if ( (Azero = '0') and (Bzero = '0') ) then
+                    -- Se não tiver acabado a multiplicação
                     ProximoEstado <= S3; -- Vai para S3
-                elsif ( (Azero = '1') or (Bzero = '1') ) then -- Se algum dos sinais que dizem se A ou B são zero
+                elsif ( (Azero = '1') or (Bzero = '1') ) then 
+                    -- Se algum dos sinais que dizem se A ou B são zero
                     ProximoEstado <= S4; -- Vai para S4
                 end if;
                 

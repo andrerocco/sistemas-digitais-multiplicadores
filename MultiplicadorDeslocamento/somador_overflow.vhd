@@ -1,8 +1,8 @@
-library IEEE;
-use IEEE.Std_Logic_1164.all;
-use IEEE.std_logic_signed.all;
-use IEEE.std_logic_arith.all;
-use IEEE.numeric_std.all;
+library ieee;
+use ieee.Std_Logic_1164.all;
+use ieee.std_logic_signed.all;
+use ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
 
 entity somador_overflow is 
 generic(N : integer );
