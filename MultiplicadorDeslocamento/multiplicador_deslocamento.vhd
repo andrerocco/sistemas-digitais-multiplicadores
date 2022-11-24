@@ -10,8 +10,6 @@ generic(
 	CONTADOR : integer := 3
 	);
 port(
-   HEX0, HEX1: out std_logic_vector(6 downto 0); -- Sinaliza o estado
-
 	CLK: in std_logic;
 	INICIAR, RESET: in std_logic;
 	PRONTO: out std_logic;
@@ -46,8 +44,10 @@ architecture rtl of multiplicador_deslocamento is
     signal reg_cont: std_logic_vector(CONTADOR-1 downto 0);
     signal status_pronto: std_logic;
     
-    signal Zero_AB: std_logic_vector(N-1 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de A e B
-    signal Zero_CONT: std_logic_vector(CONTADOR-1 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de reg_cont
+    -- Zero em binário com a quantidade de bits de A e B
+    signal Zero_AB: std_logic_vector(N-1 downto 0) := (others => '0');
+    -- Zero em binário com a quantidade de bits de reg_cont
+    signal Zero_CONT: std_logic_vector(CONTADOR-1 downto 0) := (others => '0');
 
     signal overflow, overflow_capturado: std_logic := '0';
     signal reg_soma: std_logic_vector(N-1 downto 0); 
@@ -87,10 +87,6 @@ begin
                 -- Operações
                 status_pronto <= '1';
                 
-                
-                HEX0 <= "0010010";
-                HEX1 <= not("1111110");
-                
             when S1 =>
                 -- Lógica do estado
                 ProximoEstado <= S2;
@@ -102,10 +98,6 @@ begin
                 B <= NUM_B; -- Copia os número B da entrada
                 P <= (others => '0'); -- 0 em binário
                 reg_cont <= std_logic_vector(to_unsigned(CONTADOR, reg_cont'length));
-                
-                
-                HEX0 <= "0010010";
-                HEX1 <= not("0000110");
             
             when S2 =>
                 -- Lógica do estado
@@ -114,10 +106,6 @@ begin
                 else
                     ProximoEstado <= S3;
                 end if;
-                
-                
-                HEX0 <= "0010010";
-                HEX1 <= not("1011011");
                 
             when S3 =>
                 -- Lógica do estado
@@ -137,10 +125,6 @@ begin
                 end if;
                 
                 reg_mult <= P;
-                
-                
-                HEX0 <= "0010010";
-                HEX1 <= not("1001111");
             
             when S4 =>
                 -- Lógica do estado
@@ -151,10 +135,6 @@ begin
                 overflow_capturado <= overflow;
                 
                 reg_mult <= P;
-                
-                
-                HEX0 <= "0010010";
-                HEX1 <= not("1100110");
             
             when S5 =>
                 -- Lógica do estado
@@ -166,19 +146,11 @@ begin
                 reg_cont <= reg_cont - 1 ; -- Subtrai 1 do contador
                 
                 reg_mult <= P;
-                
-                
-                HEX0 <= "0010010";
-                HEX1 <= not("1101101");
             
             when S6 =>
                 ProximoEstado <= S0;
                 
                 reg_mult <= P;
-                
-                
-                HEX0 <= "0010010";
-                HEX1 <= not("1111101");
         
         end case;
         
