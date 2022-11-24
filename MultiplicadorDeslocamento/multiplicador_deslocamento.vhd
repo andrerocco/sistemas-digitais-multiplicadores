@@ -1,7 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use ieee.std_logic_arith.all; 
+use ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
 
 entity multiplicador_deslocamento is
 generic(
@@ -24,7 +25,7 @@ end multiplicador_deslocamento;
 architecture rtl of multiplicador_deslocamento is
     
     component somador_overflow is 
-        generic(N : integer := 4);
+        generic(N : integer );
         port (
             A, B : std_logic_vector(N-1 downto 0);
 	         Cout : out std_logic;
@@ -38,7 +39,7 @@ architecture rtl of multiplicador_deslocamento is
     signal EstadoAtual, ProximoEstado: STATES := S0; -- O sistema começa no estado S0
     
     -- Sinais
-    signal reg_mult: std_logic_vector((N*2)-1 downto 0) := "11111111";
+    signal reg_mult: std_logic_vector((N*2)-1 downto 0) := (others => '0');
     
     signal A, B: std_logic_vector(N-1 downto 0);
     signal P: std_logic_vector((N*2)-1 downto 0);
@@ -46,14 +47,16 @@ architecture rtl of multiplicador_deslocamento is
     signal status_pronto: std_logic;
     
     signal Zero_AB: std_logic_vector(N-1 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de A e B
-    signal Zero_CONT: std_logic_vector(2 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de reg_cont
+    signal Zero_CONT: std_logic_vector(CONTADOR-1 downto 0) := (others => '0'); -- Zero em binário com a quantidade de bits de reg_cont
 
     signal overflow, overflow_capturado: std_logic := '0';
     signal reg_soma: std_logic_vector(N-1 downto 0); 
 
 begin
     
-    SOMA: somador_overflow port map (
+    SOMA: somador_overflow 
+	 generic map ( N => 4 )
+	 port map (
         A => P((N*2)-1 downto N), B => B,
         Cout => overflow,
         RESULTADO => reg_soma
